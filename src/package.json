@@ -1,0 +1,21 @@
+{
+  "name": "weown-ibc-smart-contracts",
+  "version": "1.0.0",
+  "description": "WeOwn smart contracts used for inter-blockchain connectivity",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "IBCSmartContracts"
+  },
+  "author": "WeOwn",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^3.3.0"
+  }
+}
