@@ -587,4 +587,5 @@ contract('wCHXToken', accounts => {
         console.log(swapGasEstimate);
         //await wChxToken.transfer(admin, tokenQty3, {from: ethAddress1})
     })*/
+    
 })
