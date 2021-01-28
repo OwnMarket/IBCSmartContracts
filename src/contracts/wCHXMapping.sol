@@ -7,9 +7,9 @@ contract wCHXMapping is Ownable {
     event AddressMapped(address indexed ethAddress, string chxAddress, string signature);
     event AddressMappingRemoved(address indexed ethAddress, string chxAddress, string signature);
 
-    mapping (address => string) private _mappedEthAddresses;
-    mapping (string => address) private _mappedChxAddresses;
-    mapping (string => string) private _mappedSignatures;
+    mapping (address => string) private _ethToChxAddresses;
+    mapping (string => address) private _chxToEthAddresses;
+    mapping (string => string) private _chxToSignatures;
 
     constructor()
         public
@@ -21,7 +21,7 @@ contract wCHXMapping is Ownable {
         view
         returns (string memory) 
     {
-        return _mappedEthAddresses[_ethAddress];
+        return _ethToChxAddresses[_ethAddress];
     }
 
     function ethAddress(string calldata _chxAddress)
@@ -29,7 +29,7 @@ contract wCHXMapping is Ownable {
         view
         returns (address) 
     {
-        return _mappedChxAddresses[_chxAddress];
+        return _chxToEthAddresses[_chxAddress];
     }
 
     function signature(string calldata _chxAddress)
@@ -37,7 +37,7 @@ contract wCHXMapping is Ownable {
         view
         returns (string memory) 
     {
-        return _mappedSignatures[_chxAddress];
+        return _chxToSignatures[_chxAddress];
     }
 
     function mapAddress(string calldata _chxAddress, string calldata _signature)
@@ -45,14 +45,15 @@ contract wCHXMapping is Ownable {
     {
         address _ethAddress = _msgSender();
 
-        require(bytes(_mappedEthAddresses[_ethAddress]).length == 0);
-        require(_mappedChxAddresses[_chxAddress] == address(0));
-        require(bytes(_mappedSignatures[_chxAddress]).length == 0);
+        require(bytes(_ethToChxAddresses[_ethAddress]).length == 0);
+        require(_chxToEthAddresses[_chxAddress] == address(0));
+        require(bytes(_chxToSignatures[_chxAddress]).length == 0);
         _checkChxAddress(_chxAddress);
+        _checkSignature(_signature);
 
-        _mappedEthAddresses[_ethAddress] = _chxAddress;
-        _mappedChxAddresses[_chxAddress] = _ethAddress;
-        _mappedSignatures[_chxAddress] = _signature;
+        _ethToChxAddresses[_ethAddress] = _chxAddress;
+        _chxToEthAddresses[_chxAddress] = _ethAddress;
+        _chxToSignatures[_chxAddress] = _signature;
 
         emit AddressMapped(_ethAddress, _chxAddress, _signature);
     }
@@ -67,39 +68,53 @@ contract wCHXMapping is Ownable {
     function _removeAddress(address _ethAddress)
         private
     {
-        string memory _chxAddress = _mappedEthAddresses[_ethAddress];
+        string memory _chxAddress = _ethToChxAddresses[_ethAddress];
         require(bytes(_chxAddress).length != 0);
 
-        string memory _signature = _mappedSignatures[_chxAddress];
-        require(_mappedChxAddresses[_chxAddress] != address(0));
+        string memory _signature = _chxToSignatures[_chxAddress];
         require(bytes(_signature).length != 0);
-        require(_mappedChxAddresses[_chxAddress] == _ethAddress);
+        require(_chxToEthAddresses[_chxAddress] == _ethAddress);
         
-
-        delete _mappedEthAddresses[_ethAddress];
-        delete _mappedChxAddresses[_chxAddress];
-        delete _mappedSignatures[_chxAddress];
+        delete _ethToChxAddresses[_ethAddress];
+        delete _chxToEthAddresses[_chxAddress];
+        delete _chxToSignatures[_chxAddress];
         
         emit AddressMappingRemoved(_ethAddress, _chxAddress, _signature);
     }
 
+    function _isAlphanumericChar(bytes1 _char)
+        private
+        pure
+        returns (bool)
+    {
+        return (_char >= 0x30 && _char <= 0x39) || 
+            (_char >= 0x41 && _char <= 0x5A) || 
+            (_char >= 0x61 && _char <= 0x7A);
+    }
+
     function _checkChxAddress(string memory _chxAddress)
         private 
+        pure
     {
         bytes memory _strBytes = bytes(_chxAddress);
-
-        bytes memory _begining = new bytes(2);
-        _begining[0] = _strBytes[0];
-        _begining[1] = _strBytes[1];
-        require(keccak256(abi.encodePacked(string(_begining))) == keccak256(abi.encodePacked("CH")), "CHX address is incorrect");
+        bytes memory _prefix = bytes("CH");
+        require(_strBytes[0] == _prefix[0] && _strBytes[1] == _prefix[1], "Invalid CHX address");
 
         bytes1 _lastChar = _strBytes[_strBytes.length - 1];
-        require(
-            (_lastChar >= 0x30 && _lastChar <= 0x39) || 
-            (_lastChar >= 0x41 && _lastChar <= 0x5A) || 
-            (_lastChar >= 0x61 && _lastChar <= 0x7A),
-            "CHX address ends with incorrect character"
-        );
+        require(_isAlphanumericChar(_lastChar), "CHX address ends with incorrect character");
+    }
+
+    function _checkSignature(string memory _signature)
+        private 
+        pure
+    {
+        bytes memory _strBytes = bytes(_signature);
+
+        bytes1 _firstChar = _strBytes[0];
+        require(_isAlphanumericChar(_firstChar), "Signature ends with incorrect character");
+
+        bytes1 _lastChar = _strBytes[_strBytes.length - 1];
+        require(_isAlphanumericChar(_lastChar), "Signature ends with incorrect character");
     }
 
     // Enable recovery of ether sent by mistake to this contract's address.

@@ -479,4 +479,76 @@ it('rejects address mapping if chxAddress ends with character not [A-Z][a-z]0-9]
     assert.equal(signature2After, signature2Before, 'Mapped signature 2 not expected to change')
 })
 
+it('rejects address mapping if signature ends with character not [A-Z][a-z]0-9]', async () => {
+    // ARRANGE
+    const chxAddress1Before = await wCHXMapping.chxAddress(ethAddress1)
+    const chxAddress2Before = await wCHXMapping.chxAddress(ethAddress2)
+
+    const ethAddress1Before = await wCHXMapping.ethAddress(chxAddress1)
+    const ethAddress2Before = await wCHXMapping.ethAddress(chxAddress2)
+
+    const signature1Before = await wCHXMapping.signature(chxAddress1)
+    const signature2Before = await wCHXMapping.signature(chxAddress2)
+
+    // ACT
+    await helpers.shouldFail(wCHXMapping.mapAddress(chxAddress1, "signature1 ", {from: ethAddress1}))
+    await helpers.shouldFail(wCHXMapping.mapAddress(chxAddress2, "signature1.", {from: ethAddress2}))
+    await helpers.shouldFail(wCHXMapping.mapAddress(chxAddress2, "signature1/", {from: ethAddress2}))
+    await helpers.shouldFail(wCHXMapping.mapAddress(chxAddress2, "signature1\\", {from: ethAddress2}))
+
+    // ASSERT
+    const chxAddress1After = await wCHXMapping.chxAddress(ethAddress1)
+    const chxAddress2After = await wCHXMapping.chxAddress(ethAddress2)
+
+    const ethAddress1After = await wCHXMapping.ethAddress(chxAddress1)
+    const ethAddress2After = await wCHXMapping.ethAddress(chxAddress2)
+
+    const signature1After = await wCHXMapping.signature(chxAddress1)
+    const signature2After = await wCHXMapping.signature(chxAddress2)
+
+    assert.equal(chxAddress1After, chxAddress1Before, 'Mapped chx address 1 not expected to change')
+    assert.equal(ethAddress1After, ethAddress1Before, 'Mapped eth address 1 not expected to change')
+    assert.equal(signature1After, signature1Before, 'Mapped signature not expected to change')
+
+    assert.equal(chxAddress2After, chxAddress2Before, 'Mapped chx address 2 not expected to change')
+    assert.equal(ethAddress2After, ethAddress2Before, 'Mapped eth address 2 not expected to change')
+    assert.equal(signature2After, signature2Before, 'Mapped signature 2 not expected to change')
+})
+
+it('rejects address mapping if signature starts with character not [A-Z][a-z]0-9]', async () => {
+    // ARRANGE
+    const chxAddress1Before = await wCHXMapping.chxAddress(ethAddress1)
+    const chxAddress2Before = await wCHXMapping.chxAddress(ethAddress2)
+
+    const ethAddress1Before = await wCHXMapping.ethAddress(chxAddress1)
+    const ethAddress2Before = await wCHXMapping.ethAddress(chxAddress2)
+
+    const signature1Before = await wCHXMapping.signature(chxAddress1)
+    const signature2Before = await wCHXMapping.signature(chxAddress2)
+
+    // ACT
+    await helpers.shouldFail(wCHXMapping.mapAddress(chxAddress1, " signature1", {from: ethAddress1}))
+    await helpers.shouldFail(wCHXMapping.mapAddress(chxAddress2, ".signature1", {from: ethAddress2}))
+    await helpers.shouldFail(wCHXMapping.mapAddress(chxAddress2, "/signature1", {from: ethAddress2}))
+    await helpers.shouldFail(wCHXMapping.mapAddress(chxAddress2, "\\signature1", {from: ethAddress2}))
+
+    // ASSERT
+    const chxAddress1After = await wCHXMapping.chxAddress(ethAddress1)
+    const chxAddress2After = await wCHXMapping.chxAddress(ethAddress2)
+
+    const ethAddress1After = await wCHXMapping.ethAddress(chxAddress1)
+    const ethAddress2After = await wCHXMapping.ethAddress(chxAddress2)
+
+    const signature1After = await wCHXMapping.signature(chxAddress1)
+    const signature2After = await wCHXMapping.signature(chxAddress2)
+
+    assert.equal(chxAddress1After, chxAddress1Before, 'Mapped chx address 1 not expected to change')
+    assert.equal(ethAddress1After, ethAddress1Before, 'Mapped eth address 1 not expected to change')
+    assert.equal(signature1After, signature1Before, 'Mapped signature not expected to change')
+
+    assert.equal(chxAddress2After, chxAddress2Before, 'Mapped chx address 2 not expected to change')
+    assert.equal(ethAddress2After, ethAddress2Before, 'Mapped eth address 2 not expected to change')
+    assert.equal(signature2After, signature2Before, 'Mapped signature 2 not expected to change')
+})
+
 })

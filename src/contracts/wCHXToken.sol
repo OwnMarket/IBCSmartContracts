@@ -8,88 +8,92 @@ import './wCHXMapping.sol';
 
 contract wCHXToken is ERC20Capped, Ownable {
     using SafeMath for uint;
-    event SwapToChx(address ethAddress, string chxAddress);
+    event UnwrapChx(address ethAddress, string chxAddress, uint amount);
 
     wCHXMapping public addressMapping;
-    uint private _minSwapAmount;
+    uint private _minWrapAmount;
 
-    constructor(address mappingContractAddress)
+    constructor(address _mappingContractAddress)
         ERC20("Wrapped CHX", "wCHX")
         ERC20Capped(uint(1689565220930844))
         public
     {
-        addressMapping = wCHXMapping(mappingContractAddress);
+        addressMapping = wCHXMapping(_mappingContractAddress);
         _setupDecimals(7);
-        _minSwapAmount = uint(1000).mul(1e7);
+        _minWrapAmount = uint(1000).mul(1e7);
     }
 
-    function minSwapAmount() public view returns (uint) {
-        return _minSwapAmount;
+    function minWrapAmount() 
+        public 
+        view 
+        returns (uint) 
+    {
+        return _minWrapAmount;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Transfers
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    function transfer(address recipient, uint amount)
+    function transfer(address _recipient, uint _amount)
         public
         override
         returns (bool)
     {
-        require(recipient != address(this));
-        if(recipient == owner()) {
-            require(amount >= _minSwapAmount, "Amount needs to be greater than minSwapAmount");
+        require(_recipient != address(this));
+        if (_recipient == owner()) {
+            require(_amount >= _minWrapAmount, "Amount needs to be greater than minWrapAmount");
             string memory chxAddress = addressMapping.chxAddress(_msgSender());
             require(bytes(chxAddress).length != 0);
-            emit SwapToChx(_msgSender(), chxAddress);
+            emit UnwrapChx(_msgSender(), chxAddress, _amount);
         }
-        return super.transfer(recipient, amount);
+
+        return super.transfer(_recipient, _amount);
     }
 
-    function transferFrom(address sender, address recipient, uint256 amount)
+    function transferFrom(address _sender, address _recipient, uint256 _amount)
         public
         override
         returns (bool)
     {
-        require(recipient != address(this));
-        if(recipient == owner()) {
-            require(amount >= _minSwapAmount, "Amount needs to be greater than minSwapAmount");
-            string memory chxAddress = addressMapping.chxAddress(sender);
+        require(_recipient != address(this));
+        if (_recipient == owner()) {
+            require(_amount >= _minWrapAmount, "Amount needs to be greater than minWrapAmount");
+            string memory chxAddress = addressMapping.chxAddress(_sender);
             require(bytes(chxAddress).length != 0);
-            emit SwapToChx(sender, chxAddress);
+            emit UnwrapChx(_sender, chxAddress, _amount);
         }
 
-        return super.transferFrom(sender, recipient, amount);
+        return super.transferFrom(_sender, _recipient, _amount);
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Burning, swapping and setting minSwapAmount
+    // Wrapping logic
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    function burn(uint amount)
+    function burn(uint _amount)
         public
         onlyOwner
     {
-        _burn(owner(), amount);
+        _burn(owner(), _amount);
     }
 
-    function swap(address recipient, uint amount)
+    function wrap(address _recipient, uint _amount)
         public
         onlyOwner
     {
-        string memory chxAddress = addressMapping.chxAddress(recipient);
+        string memory chxAddress = addressMapping.chxAddress(_recipient);
         require(bytes(chxAddress).length != 0);
 
-        _mint(owner(), amount);
-        transfer(recipient, amount);
+        _mint(owner(), _amount);
+        transfer(_recipient, _amount);
     }
 
-    function setMinSwapAmount(uint amount)
+    function setMinWrapAmount(uint _amount)
         public
         onlyOwner
     {
-        _minSwapAmount = amount;
+        _minWrapAmount = _amount;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
