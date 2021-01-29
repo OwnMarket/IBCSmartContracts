@@ -44,7 +44,7 @@ contract wCHXToken is ERC20Capped, Ownable {
         if (_recipient == owner()) {
             require(_amount >= _minWrapAmount, "Amount needs to be greater than minWrapAmount");
             string memory chxAddress = addressMapping.chxAddress(_msgSender());
-            require(bytes(chxAddress).length != 0);
+            require(bytes(chxAddress).length != 0, "Address is not mapped to chxAddress");
             emit UnwrapChx(_msgSender(), chxAddress, _amount);
         }
 
@@ -60,7 +60,7 @@ contract wCHXToken is ERC20Capped, Ownable {
         if (_recipient == owner()) {
             require(_amount >= _minWrapAmount, "Amount needs to be greater than minWrapAmount");
             string memory chxAddress = addressMapping.chxAddress(_sender);
-            require(bytes(chxAddress).length != 0);
+            require(bytes(chxAddress).length != 0, "Address is not mapped to chxAddress");
             emit UnwrapChx(_sender, chxAddress, _amount);
         }
 
@@ -83,7 +83,7 @@ contract wCHXToken is ERC20Capped, Ownable {
         onlyOwner
     {
         string memory chxAddress = addressMapping.chxAddress(_recipient);
-        require(bytes(chxAddress).length != 0);
+        require(bytes(chxAddress).length != 0, "Address is not mapped to chxAddress");
 
         _mint(owner(), _amount);
         transfer(_recipient, _amount);
