@@ -78,15 +78,11 @@ contract wCHXToken is ERC20Capped, Ownable {
         _burn(owner(), _amount);
     }
 
-    function wrap(address _recipient, uint _amount)
+    function mint(address _recipient, uint _amount)
         public
         onlyOwner
     {
-        string memory chxAddress = addressMapping.chxAddress(_recipient);
-        require(bytes(chxAddress).length != 0, "Address is not mapped to chxAddress");
-
-        _mint(owner(), _amount);
-        transfer(_recipient, _amount);
+        _mint(_recipient, _amount);
     }
 
     function setMinWrapAmount(uint _amount)

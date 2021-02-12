@@ -38,7 +38,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.minWrapAmount()).eq(minWrapAmount), 'MinWrapAmount mismatch')
     })
 
-    it('allow swap for owner', async() => {
+    it('allow mint for owner', async() => {
         // ARRANGE
         const tokenQty = e7(2000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
@@ -48,7 +48,7 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await wChxToken.wrap(ethAddress1, tokenQty, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty, {from: admin})
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -61,7 +61,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(tokenQty), 'Total supply mismatch')
     })
 
-    it('reject swap if recipient address is not mapped', async() => {
+    it('allow mint if recipient address is not mapped', async() => {
         // ARRANGE
         const tokenQty = e7(2000)
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
@@ -70,17 +70,20 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await helpers.shouldFail(wChxToken.wrap(ethAddress1, tokenQty, {from: admin}))
+        await wChxToken.mint(ethAddress1, tokenQty, {from: admin})
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
         const address2BalanceAfter = await wChxToken.balanceOf(ethAddress2) 
         
-        assert(address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 not expected to change')
+        assert(!address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 expected to change')
         assert(address2BalanceAfter.eq(address2BalanceBefore), 'Balance of address 2 not expected to change')
+
+        assert(address1BalanceAfter.eq(tokenQty), 'Balance of address 1 mismatch')
+        assert((await wChxToken.totalSupply()).eq(tokenQty), 'Total supply mismatch')
     })
 
-    it('reject swap if mapping of recipient address is removed', async() => {
+    it('allow mint if mapping of recipient address is removed', async() => {
         // ARRANGE
         const tokenQty = e7(2000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
@@ -91,17 +94,20 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await helpers.shouldFail(wChxToken.wrap(ethAddress1, tokenQty, {from: admin}))
+        await wChxToken.mint(ethAddress1, tokenQty, {from: admin})
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
         const address2BalanceAfter = await wChxToken.balanceOf(ethAddress2) 
         
-        assert(address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 not expected to change')
+        assert(!address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 expected to change')
         assert(address2BalanceAfter.eq(address2BalanceBefore), 'Balance of address 2 not expected to change')
+
+        assert(address1BalanceAfter.eq(tokenQty), 'Balance of address 1 mismatch')
+        assert((await wChxToken.totalSupply()).eq(tokenQty), 'Total supply mismatch')
     })
 
-    it('reject swap if not called by contract owner', async() => {
+    it('reject mint if not called by contract owner', async() => {
         // ARRANGE
         const tokenQty = e7(2000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
@@ -111,7 +117,7 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await helpers.shouldFail(wChxToken.wrap(ethAddress2, tokenQty, {from: ethAddress1}))
+        await helpers.shouldFail(wChxToken.mint(ethAddress2, tokenQty, {from: ethAddress1}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -122,7 +128,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(e7(0)), 'Total supply mismatch')
     })
 
-    it('reject swap if amount grater than cap', async() => {
+    it('reject mint if amount grater than cap', async() => {
         // ARRANGE
         const tokenQty = e7(168956522).add(e7(1))
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
@@ -132,7 +138,7 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await helpers.shouldFail(wChxToken.wrap(ethAddress1, tokenQty, {from: admin}))
+        await helpers.shouldFail(wChxToken.mint(ethAddress1, tokenQty, {from: admin}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -143,7 +149,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(e7(0)), 'Total supply mismatch')
     })
 
-    it('allow multiple swaps for owner', async() => {
+    it('allow multiple mints for owner', async() => {
         // ARRANGE
         const tokenQty1 = e7(2000)
         const tokenQty2 = e7(3000)
@@ -154,8 +160,8 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.wrap(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -169,7 +175,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(tokenQty1.add(tokenQty2)), 'Total supply mismatch')
     })
 
-    it('reject multiple swaps if total supply would exceed cap', async() => {
+    it('reject multiple mints if total supply would exceed cap', async() => {
         // ARRANGE
         const tokenQty1 = e7(168956522)
         const tokenQty2 = e7(1)
@@ -180,8 +186,8 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
-        await helpers.shouldFail(wChxToken.wrap(ethAddress2, tokenQty2, {from: admin}))
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await helpers.shouldFail(wChxToken.mint(ethAddress2, tokenQty2, {from: admin}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -202,8 +208,8 @@ contract('wCHXToken', accounts => {
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.wrap(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
@@ -231,8 +237,8 @@ contract('wCHXToken', accounts => {
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.wrap(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
@@ -262,7 +268,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = minWrapAmount
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
         const adminBalanceBefore = await wChxToken.balanceOf(admin)
@@ -289,7 +295,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = minWrapAmount
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
         const adminBalanceBefore = await wChxToken.balanceOf(admin)
@@ -315,7 +321,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = minWrapAmount.sub(e7(1))
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
         const adminBalanceBefore = await wChxToken.balanceOf(admin)
@@ -340,8 +346,8 @@ contract('wCHXToken', accounts => {
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.wrap(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -370,8 +376,8 @@ contract('wCHXToken', accounts => {
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.wrap(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -402,7 +408,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = minWrapAmount
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -430,7 +436,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = minWrapAmount
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -457,7 +463,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = minWrapAmount.sub(e7(1))
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -481,7 +487,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = e7(1000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
         await wChxToken.transfer(admin, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -507,7 +513,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = e7(1000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
         const adminBalanceBefore = await wChxToken.balanceOf(admin)
@@ -531,7 +537,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = e7(1000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
         await wChxToken.transfer(admin, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
