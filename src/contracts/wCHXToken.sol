@@ -9,9 +9,11 @@ import './wCHXMapping.sol';
 contract wCHXToken is ERC20Capped, Ownable {
     using SafeMath for uint;
     event UnwrapChx(address ethAddress, string chxAddress, uint amount);
+    event WrapChx(address ethAddress, string chxAddress, uint amount);
 
     wCHXMapping public addressMapping;
     uint private _minWrapAmount;
+    mapping (address => uint) private _pendingUnwrapBalances;
 
     constructor(address _mappingContractAddress)
         ERC20("Wrapped CHX", "wCHX")
@@ -24,11 +26,19 @@ contract wCHXToken is ERC20Capped, Ownable {
     }
 
     function minWrapAmount() 
-        public 
+        external 
         view 
         returns (uint) 
     {
         return _minWrapAmount;
+    }
+
+    function pendingUnwrapBalance(address _ethAddress) 
+        external 
+        view 
+        returns (uint) 
+    {
+        return _pendingUnwrapBalances[_ethAddress];
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,15 +50,16 @@ contract wCHXToken is ERC20Capped, Ownable {
         override
         returns (bool)
     {
-        require(_recipient != address(this));
-        if (_recipient == owner()) {
-            require(_amount >= _minWrapAmount, "Amount needs to be greater than minWrapAmount");
-            string memory chxAddress = addressMapping.chxAddress(_msgSender());
-            require(bytes(chxAddress).length != 0, "Address is not mapped to chxAddress");
-            emit UnwrapChx(_msgSender(), chxAddress, _amount);
+        validateAndLogUnwrap(_msgSender(), _recipient, _amount);
+
+        bool transferResult = super.transfer(_recipient, _amount);
+
+        if (transferResult) 
+        {
+            _pendingUnwrapBalances[_msgSender()] = _pendingUnwrapBalances[_msgSender()].add(_amount);
         }
 
-        return super.transfer(_recipient, _amount);
+        return transferResult;
     }
 
     function transferFrom(address _sender, address _recipient, uint256 _amount)
@@ -56,33 +67,66 @@ contract wCHXToken is ERC20Capped, Ownable {
         override
         returns (bool)
     {
-        require(_recipient != address(this));
-        if (_recipient == owner()) {
-            require(_amount >= _minWrapAmount, "Amount needs to be greater than minWrapAmount");
-            string memory chxAddress = addressMapping.chxAddress(_sender);
-            require(bytes(chxAddress).length != 0, "Address is not mapped to chxAddress");
-            emit UnwrapChx(_sender, chxAddress, _amount);
+        validateAndLogUnwrap(_sender, _recipient, _amount);
+
+        bool transferResult = super.transferFrom(_sender, _recipient, _amount);
+
+        if (transferResult) 
+        {
+            _pendingUnwrapBalances[_sender] = _pendingUnwrapBalances[_sender].add(_amount);
         }
 
-        return super.transferFrom(_sender, _recipient, _amount);
+        return transferResult;
+    }
+
+    function validateAndLogUnwrap(address _sender, address _recipient, uint256 _amount) 
+        private
+    {
+        if (_recipient == address(this)) {
+            require(_amount >= _minWrapAmount, "Amount needs to be greater than minWrapAmount");
+            string memory chxAddress = addressMapping.chxAddress(_sender);
+            require(bytes(chxAddress).length != 0, "Address is not mapped to CHX address");
+            emit UnwrapChx(_sender, chxAddress, _amount);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Wrapping logic
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    function burn(uint _amount)
+    function burnUnwrapedTokens(string memory _chxAddress, uint _amount)
         public
         onlyOwner
     {
-        _burn(owner(), _amount);
+        address ethAddress = addressMapping.ethAddress(_chxAddress);
+        require(ethAddress != address(0), "CHX address is not mapped to ETH address");
+
+        _pendingUnwrapBalances[ethAddress] = _pendingUnwrapBalances[ethAddress].sub(_amount, "Burn amount exceeds unwraped token balance");
+        _burn(address(this), _amount);
     }
 
-    function mint(address _recipient, uint _amount)
+    function revertUnwrapedTokens(string memory _chxAddress, uint _revertAmount, uint _feeAmount)
         public
         onlyOwner
     {
-        _mint(_recipient, _amount);
+        address ethAddress = addressMapping.ethAddress(_chxAddress);
+        require(ethAddress != address(0), "CHX address is not mapped to ETH address");
+
+        uint totalAmount = _revertAmount.add(_feeAmount);
+        _pendingUnwrapBalances[ethAddress] = _pendingUnwrapBalances[ethAddress].sub(totalAmount, "Total amount exceeds unwraped token balance");
+        _burn(address(this), _feeAmount);
+        _transfer(address(this), ethAddress, _revertAmount);
+    }
+
+    function wrap(string memory _chxAddress, uint _amount)
+        public
+        onlyOwner
+    {
+        address ethAddress = addressMapping.ethAddress(_chxAddress);
+        require(ethAddress != address(0), "CHX address is not mapped to ETH address");
+        emit WrapChx(ethAddress, _chxAddress, _amount);
+
+        _mint(ethAddress, _amount);
     }
 
     function setMinWrapAmount(uint _amount)
@@ -112,6 +156,7 @@ contract wCHXToken is ERC20Capped, Ownable {
         onlyOwner
         returns (bool)
     {
+        require(address(_token) != address(this), "wCHXToken cannot be drained");
         return _token.transfer(owner(), _amount);
     }
 }

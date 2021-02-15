@@ -38,7 +38,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.minWrapAmount()).eq(minWrapAmount), 'MinWrapAmount mismatch')
     })
 
-    it('allow mint for owner', async() => {
+    it('allow wrap for owner', async() => {
         // ARRANGE
         const tokenQty = e7(2000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
@@ -48,7 +48,7 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await wChxToken.mint(ethAddress1, tokenQty, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty, {from: admin})
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -61,7 +61,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(tokenQty), 'Total supply mismatch')
     })
 
-    it('allow mint if recipient address is not mapped', async() => {
+    it('reject wrap if recipient address is not mapped', async() => {
         // ARRANGE
         const tokenQty = e7(2000)
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
@@ -70,20 +70,18 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await wChxToken.mint(ethAddress1, tokenQty, {from: admin})
+        await helpers.shouldFail(wChxToken.wrap(chxAddress1, tokenQty, {from: admin}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
         const address2BalanceAfter = await wChxToken.balanceOf(ethAddress2) 
         
-        assert(!address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 expected to change')
+        assert(address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 not expected to change')
         assert(address2BalanceAfter.eq(address2BalanceBefore), 'Balance of address 2 not expected to change')
-
-        assert(address1BalanceAfter.eq(tokenQty), 'Balance of address 1 mismatch')
-        assert((await wChxToken.totalSupply()).eq(tokenQty), 'Total supply mismatch')
+        assert((await wChxToken.totalSupply()).eq(e7(0)), 'Total supply mismatch')
     })
 
-    it('allow mint if mapping of recipient address is removed', async() => {
+    it('reject wrap if mapping of recipient address is removed', async() => {
         // ARRANGE
         const tokenQty = e7(2000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
@@ -94,20 +92,18 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await wChxToken.mint(ethAddress1, tokenQty, {from: admin})
+        await helpers.shouldFail(wChxToken.wrap(chxAddress1, tokenQty, {from: admin}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
         const address2BalanceAfter = await wChxToken.balanceOf(ethAddress2) 
         
-        assert(!address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 expected to change')
+        assert(address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 not expected to change')
         assert(address2BalanceAfter.eq(address2BalanceBefore), 'Balance of address 2 not expected to change')
-
-        assert(address1BalanceAfter.eq(tokenQty), 'Balance of address 1 mismatch')
-        assert((await wChxToken.totalSupply()).eq(tokenQty), 'Total supply mismatch')
+        assert((await wChxToken.totalSupply()).eq(e7(0)), 'Total supply mismatch')
     })
 
-    it('reject mint if not called by contract owner', async() => {
+    it('reject wrap if not called by contract owner', async() => {
         // ARRANGE
         const tokenQty = e7(2000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
@@ -117,7 +113,7 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await helpers.shouldFail(wChxToken.mint(ethAddress2, tokenQty, {from: ethAddress1}))
+        await helpers.shouldFail(wChxToken.wrap(chxAddress2, tokenQty, {from: ethAddress1}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -128,7 +124,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(e7(0)), 'Total supply mismatch')
     })
 
-    it('reject mint if amount grater than cap', async() => {
+    it('reject wrap if amount grater than cap', async() => {
         // ARRANGE
         const tokenQty = e7(168956522).add(e7(1))
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
@@ -138,7 +134,7 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await helpers.shouldFail(wChxToken.mint(ethAddress1, tokenQty, {from: admin}))
+        await helpers.shouldFail(wChxToken.wrap(chxAddress1, tokenQty, {from: admin}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -149,7 +145,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(e7(0)), 'Total supply mismatch')
     })
 
-    it('allow multiple mints for owner', async() => {
+    it('allow multiple wraps for owner', async() => {
         // ARRANGE
         const tokenQty1 = e7(2000)
         const tokenQty2 = e7(3000)
@@ -160,8 +156,8 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress2, tokenQty2, {from: admin})
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -175,7 +171,7 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(tokenQty1.add(tokenQty2)), 'Total supply mismatch')
     })
 
-    it('reject multiple mints if total supply would exceed cap', async() => {
+    it('reject multiple wraps if total supply would exceed cap', async() => {
         // ARRANGE
         const tokenQty1 = e7(168956522)
         const tokenQty2 = e7(1)
@@ -186,8 +182,8 @@ contract('wCHXToken', accounts => {
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
 
         // ACT
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
-        await helpers.shouldFail(wChxToken.mint(ethAddress2, tokenQty2, {from: admin}))
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
+        await helpers.shouldFail(wChxToken.wrap(chxAddress2, tokenQty2, {from: admin}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
@@ -208,8 +204,8 @@ contract('wCHXToken', accounts => {
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress2, tokenQty2, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
@@ -237,8 +233,8 @@ contract('wCHXToken', accounts => {
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress2, tokenQty2, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
         const address2BalanceBefore = await wChxToken.balanceOf(ethAddress2)
@@ -261,80 +257,84 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(tokenQty1.add(tokenQty2)), 'Total supply mismatch')
     })
 
-    it('allow transfer to contract owner if address is mapped and amount greater than minWrapAmount', async() => {
+    it('allow transfer to contract if address is mapped and amount greater than minWrapAmount', async() => {
         // ARRANGE
         const minWrapAmount = await wChxToken.minWrapAmount();
         const tokenQty1 = minWrapAmount.mul(web3.utils.toBN(2))
         const tokenQty3 = minWrapAmount
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceBefore = await wChxToken.balanceOf(admin)
+        const contractBalanceBefore = await wChxToken.balanceOf(wChxToken.address)
+        const address1PendingUnwrapBalanceBefore = await wChxToken.pendingUnwrapBalance(ethAddress1)
 
         // ACT
-        await wChxToken.transfer(admin, tokenQty3, {from: ethAddress1})
+        await wChxToken.transfer(wChxToken.address, tokenQty3, {from: ethAddress1})
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceAfter = await wChxToken.balanceOf(admin) 
+        const contractBalanceAfter = await wChxToken.balanceOf(wChxToken.address)
+        const address1PendingUnwrapBalanceAfter = await wChxToken.pendingUnwrapBalance(ethAddress1) 
         
         assert(!address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 expected to change')
-        assert(!adminBalanceAfter.eq(adminBalanceBefore), 'Balance of address 2 expected to change')
+        assert(!contractBalanceAfter.eq(contractBalanceBefore), 'Balance of contract address expected to change')
+        assert(!address1PendingUnwrapBalanceAfter.eq(address1PendingUnwrapBalanceBefore), 'Pending unwrap balance of address 1 expected to change')
 
         assert(address1BalanceAfter.eq(address1BalanceBefore.sub(tokenQty3)), 'Balance of address 1 mismatch')
-        assert(adminBalanceAfter.eq(adminBalanceBefore.add(tokenQty3)), 'Balance of owner mismatch')
+        assert(contractBalanceAfter.eq(contractBalanceBefore.add(tokenQty3)), 'Balance of contract mismatch')
+        assert(address1PendingUnwrapBalanceAfter.eq(address1PendingUnwrapBalanceBefore.add(tokenQty3)), 'Balance of contract mismatch')
         assert((await wChxToken.totalSupply()).eq(tokenQty1), 'Total supply mismatch')
     })
 
-    it('reject transfer to contract owner if address is not mapped', async() => {
+    it('reject transfer to contract if address is not mapped', async() => {
         // ARRANGE
         const minWrapAmount = await wChxToken.minWrapAmount();
         const tokenQty1 = minWrapAmount.mul(web3.utils.toBN(2))
         const tokenQty3 = minWrapAmount
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceBefore = await wChxToken.balanceOf(admin)
+        const contractBalanceBefore = await wChxToken.balanceOf(wChxToken.address)
 
         // ACT
         await wChxMapping.removeMappedAddress(ethAddress1, {from: admin})
 
-        await helpers.shouldFail(wChxToken.transfer(admin, tokenQty3, {from: ethAddress1}))
+        await helpers.shouldFail(wChxToken.transfer(wChxToken.address, tokenQty3, {from: ethAddress1}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceAfter = await wChxToken.balanceOf(admin) 
+        const contractBalanceAfter = await wChxToken.balanceOf(wChxToken.address) 
         
         assert(address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 not expected to change')
-        assert(adminBalanceAfter.eq(adminBalanceBefore), 'Balance of owner not expected to change')
+        assert(contractBalanceAfter.eq(contractBalanceBefore), 'Balance of contract not expected to change')
         assert((await wChxToken.totalSupply()).eq(tokenQty1), 'Total supply mismatch')
     })
 
-    it('reject transfer to contract owner if amount is smaller than minWrapAmount', async() => {
+    it('reject transfer to contract if amount is smaller than minWrapAmount', async() => {
         // ARRANGE
         const minWrapAmount = await wChxToken.minWrapAmount();
         const tokenQty1 = minWrapAmount.mul(web3.utils.toBN(2))
         const tokenQty3 = minWrapAmount.sub(e7(1))
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceBefore = await wChxToken.balanceOf(admin)
+        const contractBalanceBefore = await wChxToken.balanceOf(wChxToken.address)
 
         // ACT
-        await helpers.shouldFail(wChxToken.transfer(admin, tokenQty3, {from: ethAddress1}))
+        await helpers.shouldFail(wChxToken.transfer(wChxToken.address, tokenQty3, {from: ethAddress1}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceAfter = await wChxToken.balanceOf(admin) 
+        const contractBalanceAfter = await wChxToken.balanceOf(wChxToken.address) 
         
         assert(address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 not expected to change')
-        assert(adminBalanceAfter.eq(adminBalanceBefore), 'Balance of owner not expected to change')
+        assert(contractBalanceAfter.eq(contractBalanceBefore), 'Balance of contract not expected to change')
         assert((await wChxToken.totalSupply()).eq(tokenQty1), 'Total supply mismatch')
     })
 
@@ -346,8 +346,8 @@ contract('wCHXToken', accounts => {
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress2, tokenQty2, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -376,8 +376,8 @@ contract('wCHXToken', accounts => {
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
         await wChxMapping.mapAddress(chxAddress2, signature2, {from: ethAddress2})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
-        await wChxToken.mint(ethAddress2, tokenQty2, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress2, tokenQty2, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -401,31 +401,31 @@ contract('wCHXToken', accounts => {
         assert((await wChxToken.totalSupply()).eq(tokenQty1.add(tokenQty2)), 'Total supply mismatch')
     })
 
-    it('allow transferFrom function to contract owner if address is mapped and amount grater than minWrapAmount', async() => {
+    it('allow transferFrom function to contract if address is mapped and amount grater than minWrapAmount', async() => {
         // ARRANGE
         const minWrapAmount = await wChxToken.minWrapAmount();
         const tokenQty1 = minWrapAmount.mul(web3.utils.toBN(2))
         const tokenQty3 = minWrapAmount
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceBefore = await wChxToken.balanceOf(admin)
+        const contractBalanceBefore = await wChxToken.balanceOf(wChxToken.address)
 
         // ACT
-        await wChxToken.transferFrom(ethAddress1, admin, tokenQty3, {from: ethAddress3})
+        await wChxToken.transferFrom(ethAddress1, wChxToken.address, tokenQty3, {from: ethAddress3})
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceAfter = await wChxToken.balanceOf(admin) 
+        const contractBalanceAfter = await wChxToken.balanceOf(wChxToken.address) 
         
         assert(!address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 expected to change')
-        assert(!adminBalanceAfter.eq(adminBalanceBefore), 'Balance of address 2 expected to change')
+        assert(!contractBalanceAfter.eq(contractBalanceBefore), 'Balance of contract expected to change')
 
         assert(address1BalanceAfter.eq(address1BalanceBefore.sub(tokenQty3)), 'Balance of address 1 mismatch')
-        assert(adminBalanceAfter.eq(adminBalanceBefore.add(tokenQty3)), 'Balance of owner mismatch')
+        assert(contractBalanceAfter.eq(contractBalanceBefore.add(tokenQty3)), 'Balance of contract mismatch')
         assert((await wChxToken.totalSupply()).eq(tokenQty1), 'Total supply mismatch')
     })
 
@@ -436,23 +436,23 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = minWrapAmount
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceBefore = await wChxToken.balanceOf(admin)
+        const contractBalanceBefore = await wChxToken.balanceOf(wChxToken.address)
 
         // ACT
         await wChxMapping.removeMappedAddress(ethAddress1, {from: admin})
 
-        await helpers.shouldFail(wChxToken.transferFrom(ethAddress1, admin, tokenQty3, {from: ethAddress3}))
+        await helpers.shouldFail(wChxToken.transferFrom(ethAddress1, wChxToken.address, tokenQty3, {from: ethAddress3}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceAfter = await wChxToken.balanceOf(admin) 
+        const contractBalanceAfter = await wChxToken.balanceOf(wChxToken.address) 
         
         assert(address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 not expected to change')
-        assert(adminBalanceAfter.eq(adminBalanceBefore), 'Balance of owner not expected to change')
+        assert(contractBalanceAfter.eq(contractBalanceBefore), 'Balance of contract not expected to change')
         assert((await wChxToken.totalSupply()).eq(tokenQty1), 'Total supply mismatch')
     })
 
@@ -463,31 +463,31 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = minWrapAmount.sub(e7(1))
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(chxAddress1, tokenQty1, {from: admin})
         wChxToken.approve(ethAddress3, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceBefore = await wChxToken.balanceOf(admin)
+        const contractBalanceBefore = await wChxToken.balanceOf(wChxToken.address)
 
         // ACT
-        await helpers.shouldFail(wChxToken.transferFrom(ethAddress1, admin, tokenQty3, {from: ethAddress3}))
+        await helpers.shouldFail(wChxToken.transferFrom(ethAddress1, wChxToken.address, tokenQty3, {from: ethAddress3}))
 
         // ASSERT
         const address1BalanceAfter = await wChxToken.balanceOf(ethAddress1)
-        const adminBalanceAfter = await wChxToken.balanceOf(admin) 
+        const contractBalanceAfter = await wChxToken.balanceOf(wChxToken.address) 
         
         assert(address1BalanceAfter.eq(address1BalanceBefore), 'Balance of address 1 not expected to change')
-        assert(adminBalanceAfter.eq(adminBalanceBefore), 'Balance of owner not expected to change')
+        assert(contractBalanceAfter.eq(contractBalanceBefore), 'Balance of contract not expected to change')
         assert((await wChxToken.totalSupply()).eq(tokenQty1), 'Total supply mismatch')
     })
 
-    it('allow burning tokens if any by contract owner', async() => {
+    /*it('allow burning tokens if any by contract owner', async() => {
         // ARRANGE
         const tokenQty1 = e7(2000)
         const tokenQty3 = e7(1000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
         await wChxToken.transfer(admin, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -513,7 +513,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = e7(1000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
         const adminBalanceBefore = await wChxToken.balanceOf(admin)
@@ -537,7 +537,7 @@ contract('wCHXToken', accounts => {
         const tokenQty3 = e7(1000)
         await wChxMapping.mapAddress(chxAddress1, signature1, {from: ethAddress1})
 
-        await wChxToken.mint(ethAddress1, tokenQty1, {from: admin})
+        await wChxToken.wrap(ethAddress1, tokenQty1, {from: admin})
         await wChxToken.transfer(admin, tokenQty3, {from: ethAddress1})
 
         const address1BalanceBefore = await wChxToken.balanceOf(ethAddress1)
@@ -554,7 +554,7 @@ contract('wCHXToken', accounts => {
         assert(adminBalanceAfter.eq(adminBalanceBefore), 'Balance of owner not expected to change')
 
         assert((await wChxToken.totalSupply()).eq(tokenQty1), 'Total supply mismatch')
-    })
+    })*/
 
     it('allow setting minWrapAmount by contract owner', async() => {
         // ARRANGE
