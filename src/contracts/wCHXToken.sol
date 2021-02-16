@@ -54,7 +54,7 @@ contract wCHXToken is ERC20Capped, Ownable {
 
         bool transferResult = super.transfer(_recipient, _amount);
 
-        if (transferResult) 
+        if (transferResult && _recipient == address(this)) 
         {
             _pendingUnwrapBalances[_msgSender()] = _pendingUnwrapBalances[_msgSender()].add(_amount);
         }
@@ -71,7 +71,7 @@ contract wCHXToken is ERC20Capped, Ownable {
 
         bool transferResult = super.transferFrom(_sender, _recipient, _amount);
 
-        if (transferResult) 
+        if (transferResult && _recipient == address(this)) 
         {
             _pendingUnwrapBalances[_sender] = _pendingUnwrapBalances[_sender].add(_amount);
         }
