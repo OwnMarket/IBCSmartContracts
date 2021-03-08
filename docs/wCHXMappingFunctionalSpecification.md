@@ -3,14 +3,14 @@ Functional Specification of wCHXMapping Smart Contract
 
 ## High-level Overview
 
-wCHXMapping smart contract is used to establish permanent relationship between CHX address on WeOwn native blockchain and ETH address on Ethereum. This is pre-requisite for bridge features and for moving CHX from one blockchain to another. Only when a pair of CHX and ETH addresses is written in this smart contract, actions of wrapping (moving CHX from WeOwn blockchain to Ethereum) and unwrapping (moving CHX from Ethereum to WeOwn blockhain) are permitted.
+wCHXMapping smart contract is used to establish permanent relationship between CHX address on WeOwn native blockchain and ETH address on Ethereum. This is pre-requisite for bridge features and for moving CHX from one blockchain to another. Only when a pair of CHX and ETH addresses is written in this smart contract, actions of wrapping (moving CHX from WeOwn blockchain to Ethereum) and unwrapping (moving CHX from Ethereum to WeOwn blockchain) are permitted.
 
 Important thing to have in mind is that one CHX address can only be mapped to one ETH address and vice versa.
 
 
 ## Mapping Through Wallet
 
-Mapping process should be performed using the [Own wallet](https://wallet.weown.com). With the release 2.2, "Bridge" feature is introduced as a quick action. Clicking on quick action button and accepting the terms, would lead a user to the screen in which they should perform mapping. User should have installed [Metamask plugin](https://metamask.io/) when performing mapping. CHX address is taken from WeOwn wallet and ETH address is taken from MetaMask. Currently selected pair of addresses swill be clearly written. Wallet would ask the user to submit Ethereum transaction through Metamask and that transaction invocation of the function `mapAddress` of `wCHXMapping` contract. After tx is successfully processed, mapping of CHX and ETH addresses is stored in this smart contract.
+Mapping process should be performed using the [Own wallet](https://wallet.weown.com). With the release 2.2, "Bridge" feature is introduced as a quick action. Clicking on quick action button and accepting the terms, would lead a user to the screen in which they should perform mapping. User should have installed [Metamask plugin](https://metamask.io/) when performing mapping. CHX address is taken from WeOwn wallet and ETH address is taken from MetaMask. Currently selected pair of addresses will be clearly written. Wallet would ask the user to submit Ethereum transaction through Metamask and that transaction invocation of the function `mapAddress` of `wCHXMapping` contract. After tx is successfully processed, mapping of CHX and ETH addresses is stored in this smart contract.
 
 
 ## Mapping Manually

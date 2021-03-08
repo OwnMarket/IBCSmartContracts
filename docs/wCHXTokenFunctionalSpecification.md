@@ -46,15 +46,15 @@ Wrapping CHX means that user submits tx on WeOwn blockchain (manually or automat
 
 ETH fees paid by WeOwn sync engine are converted in CHX (by taking current CHX/ETH price rate) and added to CHX fees paid by sync engine. Total fee amount is subtracted from wrap/unwrap amount, so user can expect to receive smaller amount of CHX or wCHX in this process. The same logic applies when wrap/unwrap is reverted. Amount that is reverted to CHX or wCHX holder would be always smaller than transferred amount. 
 
-When using WeOwn wallet for wrapping/unwrapping, fee estimation is given. Gas consumption of `wrap` or `burnUnwrapedTokens` is multiplied by current gas price for fast tx processing (derived from [ETH gas station](https://ethgasstation.info/)) and that amount is converted to CHX using price rate derived from [CoinMarketCap](https://coinmarketcap.com/currencies/we-own/). WeOwn blockchain fees are also added to that amount. Important thing to notice is that feew presented are is only an estimation. Fees can be higher or lower than presented amount, as gas price or CHX/ETH price rate can change between the time of submitting wrap/unwrap and its actual processing.
+When using WeOwn wallet for wrapping/unwrapping, fee estimation is given. Gas consumption of `wrap` or `burnUnwrapedTokens` is multiplied by current gas price for fast tx processing (derived from [ETH gas station](https://ethgasstation.info/)) and that amount is converted to CHX using price rate derived from [CoinMarketCap](https://coinmarketcap.com/currencies/we-own/). WeOwn blockchain fees are also added to that amount. Important thing to notice is that fees presented are only an estimation. Fees can be higher or lower than presented amount, as gas price or CHX/ETH price rate can change between the time of submitting wrap/unwrap and its actual processing.
 
 ## Other wCHXToken Functions
 wCHX token is ERC20 token and therefore, it implements its standard writing functions:
 - `approve`
 - `increaseAllowance`
 - `decreaseAllowance`
-- `transfer`, modified when transfering wCHX to the contract address
-- `transferFrom`, modified when transfering wCHX to the contract address
+- `transfer`, modified when transferring wCHX to the contract address
+- `transferFrom`, modified when transferring wCHX to the contract address
 
 It also implements ERC20 standard reading functions:
 - `allowance`
