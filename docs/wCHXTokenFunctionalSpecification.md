@@ -46,7 +46,7 @@ Wrapping CHX means that user submits tx on WeOwn blockchain (manually or automat
 
 ETH fees paid by WeOwn sync engine are converted in CHX (by taking current CHX/ETH price rate) and added to CHX fees paid by sync engine. Total fee amount is subtracted from wrap/unwrap amount, so user can expect to receive smaller amount of CHX or wCHX in this process. The same logic applies when wrap/unwrap is reverted. Amount that is reverted to CHX or wCHX holder would be always smaller than transferred amount. 
 
-When using WeOwn wallet for wrapping/unwrapping, fee estimation is given. Gas consumption of `wrap` or `burnUnwrapedTokens` is multiplied by current gas price for fast tx processing (derived from [ETH gas station](https://ethgasstation.info/)) and that amount is converted to CHX using price rate derived from [CoinMarketCap](https://coinmarketcap.com/currencies/we-own/). WeOwn blockchain fees are also added to that amount. Important thing to notice is that fees presented are only an estimation. Fees can be higher or lower than presented amount, as gas price or CHX/ETH price rate can change between the time of submitting wrap/unwrap and its actual processing.
+When using WeOwn wallet for wrapping/unwrapping, fee estimation is given. Gas consumption of `wrap` or `burnUnwrapedTokens` is multiplied by current gas price for fast tx processing (derived from [ETH gas station](https://ethgasstation.info/)) and that amount is converted to CHX using price rate derived from [CoinGecko](https://www.coingecko.com/en/coins/own/eth). WeOwn blockchain fees are also added to that amount. Important thing to notice is that fees presented are only an estimation. Fees can be higher or lower than presented amount, as gas price or CHX/ETH price rate can change between the time of submitting wrap/unwrap and its actual processing.
 
 ## Other wCHXToken Functions
 wCHX token is ERC20 token and therefore, it implements its standard writing functions:
@@ -73,7 +73,7 @@ wCHx token inherits Ownable contract and implements its functions:
 Other custom reading functions are:
 - `addressMapping`: returns Ethereum address of `wCHXMapping` contract on which the contract depends
 - `minWrapAmount`: returns minimal value of CHX that can be wrapped or unwrapped
-- `pendingUnwrapBalanceOf`: returns amount of wCHX that has been submitted for unwrapping by specified EThereum address. By default, it is 0. When wCHX holder transfers wCHX to contract address (unwrapping), it is increase to transferred amount. When sync engine burns wCHX or reverts transfer, pending unwrap balances decreases to 0 again.
+- `pendingUnwrapBalanceOf`: returns amount of wCHX that has been submitted for unwrapping by specified Ethereum address. By default, it is 0. When wCHX holder transfers wCHX to contract address (unwrapping), it is increase to transferred amount. When sync engine burns wCHX or reverts transfer, pending unwrap balances decreases to 0 again.
 
 Other custom writing functions are:
 - `drainStrayEther`: function that allows contract owner to move mistakenly sent ETH to the contract
