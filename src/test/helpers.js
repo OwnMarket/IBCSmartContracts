@@ -1,6 +1,7 @@
 module.exports = module.exports || {}
 
 module.exports.e7 = x => web3.utils.toBN(10).pow(web3.utils.toBN(7)).mul(web3.utils.toBN(x))
+module.exports.e18 = x => web3.utils.toBN(10).pow(web3.utils.toBN(18)).mul(web3.utils.toBN(x))
 
 module.exports.shouldFail = async promise => {
     try {
