@@ -5,6 +5,7 @@ This repository contains code for Bridge-related smart contracts:
 2. [wCHXMapping](https://etherscan.io/address/0x766eAAbd47c53f548Cf225f8EB7AB300648FC236)
 3. [bCHXToken](https://bscscan.com/address/0xd883d21af976ec9fa409c9f2944a1e7d03d21946)
 4. [bCHXMapping](https://bscscan.com/address/0x766eaabd47c53f548cf225f8eb7ab300648fc236)
+5. [OwnAssetBridge]()
 
 [wCHXMapping Functional Specification](docs/wCHXMappingFunctionalSpecification.md) document contains more details about wCHXMapping smart contract on Ethereum and its functionality.
 
