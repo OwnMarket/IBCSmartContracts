@@ -59,11 +59,11 @@ contract OwnAssetBridge is Ownable {
         onlyGovernor
         payable
     {
-        require(erc20Tokens[_assetHash] == address(0), "ERC20 token already exists");
-        require(bytes(assetHashes[_token]).length == 0, "Asset already exists");
-        require(bytes(accountsForAssets[_assetHash]).length == 0, "Account already exists");
-        require(IERC20(_token).balanceOf(address(this)) == 0, "Tokens should not exist on WeOwn blockchain");
-        require(msg.value >= bridgeFee, "Insufficient ETH fee is paid");
+        require(erc20Tokens[_assetHash] == address(0));
+        require(bytes(assetHashes[_token]).length == 0);
+        require(bytes(accountsForAssets[_assetHash]).length == 0);
+        require(IERC20(_token).balanceOf(address(this)) == 0);
+        require(msg.value >= bridgeFee);
 
         erc20Tokens[_assetHash] = _token;
         assetHashes[_token] = _assetHash;
@@ -90,9 +90,9 @@ contract OwnAssetBridge is Ownable {
         onlyGovernor
         payable
     {
-        require(erc20Tokens[_assetHash] == address(0), "ERC20 token already exists");
-        require(bytes(accountsForAssets[_assetHash]).length == 0, "Account already exists");
-        require(msg.value >= bridgeFee, "Insufficient ETH fee is paid");
+        require(erc20Tokens[_assetHash] == address(0));
+        require(bytes(accountsForAssets[_assetHash]).length == 0);
+        require(msg.value >= bridgeFee);
 
         address token = address(new ERC20Mintable(_assetName, _assetSymbol, _totalSupply));
 
@@ -112,17 +112,31 @@ contract OwnAssetBridge is Ownable {
     {
         string memory assetHash = assetHashes[_token];
 
-        require(bytes(assetHash).length != 0, "Asset is not bridged");
-        require(erc20Tokens[assetHash] == _token, "ERC20 token is not bridged");
-        require(bytes(accountsForAssets[assetHash]).length != 0, "Account is not specified");
+        require(bytes(assetHash).length != 0);
+        require(erc20Tokens[assetHash] == _token);
+        require(bytes(accountsForAssets[assetHash]).length != 0);
 
         uint bridgeBalance = IERC20(_token).balanceOf(address(this));
-        require(bridgeBalance == 0 || bridgeBalance == IERC20(_token).totalSupply(), "Tokens can exist only on one blockchain");
+        require(bridgeBalance == 0 || bridgeBalance == IERC20(_token).totalSupply());
 
         delete erc20Tokens[assetHash];
         delete assetHashes[_token];
         delete accountsForAssets[assetHash];
     }
+
+    /**
+     * @notice Function that mints ERC20 token created by the bridge. This function can only 
+     * be called by the governor in order to ensure consistency between WeOwn and target blockchains.
+     */
+    /// @param _token Address of ERC20 token
+    /// @param _amount Amount of tokens that will be minted
+    function mintErc20Token(address _token, uint _amount)
+        external
+        onlyGovernor
+    {
+        require(ERC20Mintable(_token).mint(address(this), _amount));
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Cross-chain transfers
@@ -140,7 +154,7 @@ contract OwnAssetBridge is Ownable {
         external
         payable
     {
-        require(msg.value >= nativeTransferFee, "Insufficient ETH fee is paid");
+        require(msg.value >= nativeTransferFee, "Insufficient fee is paid");
         require(bytes(assetHashes[_token]).length != 0, "Token is not bridged");
         require(IERC20(_token).transferFrom(_msgSender(), address(this), _amount), "Transfer failed");
 
@@ -158,7 +172,7 @@ contract OwnAssetBridge is Ownable {
         external
         payable
     {
-        require(msg.value >= targetTransferFee, "Insufficient ETH fee is paid");
+        require(msg.value >= targetTransferFee, "Insufficient fee is paid");
         require(pendingCrossChainTransfers[_txHash] == address(0), "Recipient is already determined");
         require(bytes(pendingSignedTxs[_txHash]).length == 0, "Signature is already determined");
 
@@ -276,25 +290,5 @@ contract OwnAssetBridge is Ownable {
     {
         payable(owner()).transfer(_amount);
         return true;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Miscellaneous
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Enable recovery of any ERC20 compatible token sent by mistake to this contract's address.
-    /**
-     * @notice Function by which contract owner can recover any mistakenly sent ERC20 tokens to contract's address.
-     * Condition is that ERC20 token is not bridged.
-     */
-     /// @param _token Address of ERC20 token
-    /// @param _amount Amount to be withdrawn
-    function drainStrayTokens(IERC20 _token, uint _amount)
-        external
-        onlyOwner
-        returns (bool)
-    {
-        require(bytes(assetHashes[address(_token)]).length == 0, "Bridged ERC20 token cannot be drained.");
-        return _token.transfer(owner(), _amount);
     }
 }

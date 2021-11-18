@@ -414,7 +414,7 @@
         "id": 2,
         "nodeType": "ImportDirective",
         "scope": 514,
-        "sourceUnit": 3368,
+        "sourceUnit": 3344,
         "src": "26:51:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -425,7 +425,7 @@
         "id": 3,
         "nodeType": "ImportDirective",
         "scope": 514,
-        "sourceUnit": 3181,
+        "sourceUnit": 3157,
         "src": "79:52:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -436,7 +436,7 @@
         "id": 4,
         "nodeType": "ImportDirective",
         "scope": 514,
-        "sourceUnit": 3078,
+        "sourceUnit": 3054,
         "src": "133:49:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -447,7 +447,7 @@
         "id": 5,
         "nodeType": "ImportDirective",
         "scope": 514,
-        "sourceUnit": 3055,
+        "sourceUnit": 3031,
         "src": "184:34:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -462,10 +462,10 @@
               "id": 6,
               "name": "Context",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3077,
+              "referencedDeclaration": 3053,
               "src": "245:7:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Context_$3077",
+                "typeIdentifier": "t_contract$_Context_$3053",
                 "typeString": "contract Context"
               }
             },
@@ -480,10 +480,10 @@
               "id": 8,
               "name": "IBEP20",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3054,
+              "referencedDeclaration": 3030,
               "src": "254:6:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IBEP20_$3054",
+                "typeIdentifier": "t_contract$_IBEP20_$3030",
                 "typeString": "contract IBEP20"
               }
             },
@@ -498,10 +498,10 @@
               "id": 10,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3180,
+              "referencedDeclaration": 3156,
               "src": "262:7:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$3180",
+                "typeIdentifier": "t_contract$_Ownable_$3156",
                 "typeString": "contract Ownable"
               }
             },
@@ -511,9 +511,9 @@
           }
         ],
         "contractDependencies": [
-          3054,
-          3077,
-          3180
+          3030,
+          3053,
+          3156
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -521,9 +521,9 @@
         "id": 513,
         "linearizedBaseContracts": [
           513,
-          3180,
-          3054,
-          3077
+          3156,
+          3030,
+          3053
         ],
         "name": "BEP20Token",
         "nodeType": "ContractDefinition",
@@ -535,10 +535,10 @@
               "id": 12,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3367,
+              "referencedDeclaration": 3343,
               "src": "281:8:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$3367",
+                "typeIdentifier": "t_contract$_SafeMath_$3343",
                 "typeString": "library SafeMath"
               }
             },
@@ -895,10 +895,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        4012,
-                        4013
+                        3988,
+                        3989
                       ],
-                      "referencedDeclaration": 4013,
+                      "referencedDeclaration": 3989,
                       "src": "695:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -1186,7 +1186,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4009,
+                          "referencedDeclaration": 3985,
                           "src": "873:3:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1321,7 +1321,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 4009,
+                          "referencedDeclaration": 3985,
                           "src": "934:3:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1375,7 +1375,7 @@
                       "name": "Transfer",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3045,
+                      "referencedDeclaration": 3021,
                       "src": "913:8:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$_t_uint256_$returns$__$",
@@ -1567,7 +1567,7 @@
           },
           {
             "baseFunctions": [
-              2992
+              2968
             ],
             "body": {
               "id": 101,
@@ -1584,7 +1584,7 @@
                       "name": "owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3119,
+                      "referencedDeclaration": 3095,
                       "src": "1108:5:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -1676,7 +1676,7 @@
           },
           {
             "baseFunctions": [
-              2977
+              2953
             ],
             "body": {
               "id": 110,
@@ -1766,7 +1766,7 @@
           },
           {
             "baseFunctions": [
-              2982
+              2958
             ],
             "body": {
               "id": 119,
@@ -1856,7 +1856,7 @@
           },
           {
             "baseFunctions": [
-              2987
+              2963
             ],
             "body": {
               "id": 128,
@@ -1946,7 +1946,7 @@
           },
           {
             "baseFunctions": [
-              2972
+              2948
             ],
             "body": {
               "id": 137,
@@ -2118,7 +2118,7 @@
           },
           {
             "baseFunctions": [
-              2999
+              2975
             ],
             "body": {
               "id": 158,
@@ -2264,7 +2264,7 @@
           },
           {
             "baseFunctions": [
-              3008
+              2984
             ],
             "body": {
               "id": 178,
@@ -2284,7 +2284,7 @@
                           "name": "_msgSender",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3065,
+                          "referencedDeclaration": 3041,
                           "src": "2381:10:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$__$returns$_t_address_payable_$",
@@ -2522,7 +2522,7 @@
           },
           {
             "baseFunctions": [
-              3017
+              2993
             ],
             "body": {
               "id": 195,
@@ -2723,7 +2723,7 @@
           },
           {
             "baseFunctions": [
-              3026
+              3002
             ],
             "body": {
               "id": 215,
@@ -2743,7 +2743,7 @@
                           "name": "_msgSender",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3065,
+                          "referencedDeclaration": 3041,
                           "src": "2871:10:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$__$returns$_t_address_payable_$",
@@ -2981,7 +2981,7 @@
           },
           {
             "baseFunctions": [
-              3037
+              3013
             ],
             "body": {
               "id": 252,
@@ -3103,7 +3103,7 @@
                           "name": "_msgSender",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3065,
+                          "referencedDeclaration": 3041,
                           "src": "3549:10:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$__$returns$_t_address_payable_$",
@@ -3223,7 +3223,7 @@
                                 "name": "_msgSender",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 3065,
+                                "referencedDeclaration": 3041,
                                 "src": "3583:10:0",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_function_internal_view$__$returns$_t_address_payable_$",
@@ -3263,7 +3263,7 @@
                           "lValueRequested": false,
                           "memberName": "sub",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 3250,
+                          "referencedDeclaration": 3226,
                           "src": "3563:37:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_string_memory_ptr_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -3520,7 +3520,7 @@
                           "name": "_msgSender",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3065,
+                          "referencedDeclaration": 3041,
                           "src": "4161:10:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$__$returns$_t_address_payable_$",
@@ -3606,7 +3606,7 @@
                                   "name": "_msgSender",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
-                                  "referencedDeclaration": 3065,
+                                  "referencedDeclaration": 3041,
                                   "src": "4196:10:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_function_internal_view$__$returns$_t_address_payable_$",
@@ -3671,7 +3671,7 @@
                           "lValueRequested": false,
                           "memberName": "add",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 3207,
+                          "referencedDeclaration": 3183,
                           "src": "4184:38:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -3895,7 +3895,7 @@
                           "name": "_msgSender",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3065,
+                          "referencedDeclaration": 3041,
                           "src": "4838:10:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$__$returns$_t_address_payable_$",
@@ -4003,7 +4003,7 @@
                                   "name": "_msgSender",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
-                                  "referencedDeclaration": 3065,
+                                  "referencedDeclaration": 3041,
                                   "src": "4873:10:0",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_function_internal_view$__$returns$_t_address_payable_$",
@@ -4068,7 +4068,7 @@
                           "lValueRequested": false,
                           "memberName": "sub",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 3250,
+                          "referencedDeclaration": 3226,
                           "src": "4861:38:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_string_memory_ptr_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -4415,10 +4415,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        4012,
-                        4013
+                        3988,
+                        3989
                       ],
-                      "referencedDeclaration": 4013,
+                      "referencedDeclaration": 3989,
                       "src": "5536:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4580,10 +4580,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        4012,
-                        4013
+                        3988,
+                        3989
                       ],
-                      "referencedDeclaration": 4013,
+                      "referencedDeclaration": 3989,
                       "src": "5613:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4752,7 +4752,7 @@
                         "lValueRequested": false,
                         "memberName": "sub",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3250,
+                        "referencedDeclaration": 3226,
                         "src": "5713:21:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_string_memory_ptr_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -4905,7 +4905,7 @@
                         "lValueRequested": false,
                         "memberName": "add",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3207,
+                        "referencedDeclaration": 3183,
                         "src": "5814:24:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -5000,7 +5000,7 @@
                       "name": "Transfer",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3045,
+                      "referencedDeclaration": 3021,
                       "src": "5858:8:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$_t_uint256_$returns$__$",
@@ -5280,10 +5280,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        4012,
-                        4013
+                        3988,
+                        3989
                       ],
-                      "referencedDeclaration": 4013,
+                      "referencedDeclaration": 3989,
                       "src": "6232:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -5368,7 +5368,7 @@
                             "lValueRequested": false,
                             "memberName": "add",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 3207,
+                            "referencedDeclaration": 3183,
                             "src": "6312:16:0",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -5445,10 +5445,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        4012,
-                        4013
+                        3988,
+                        3989
                       ],
-                      "referencedDeclaration": 4013,
+                      "referencedDeclaration": 3989,
                       "src": "6304:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -5541,7 +5541,7 @@
                         "lValueRequested": false,
                         "memberName": "add",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3207,
+                        "referencedDeclaration": 3183,
                         "src": "6398:16:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -5694,7 +5694,7 @@
                         "lValueRequested": false,
                         "memberName": "add",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3207,
+                        "referencedDeclaration": 3183,
                         "src": "6450:22:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -5842,7 +5842,7 @@
                       "name": "Transfer",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3045,
+                      "referencedDeclaration": 3021,
                       "src": "6492:8:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$_t_uint256_$returns$__$",
@@ -6094,10 +6094,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        4012,
-                        4013
+                        3988,
+                        3989
                       ],
-                      "referencedDeclaration": 4013,
+                      "referencedDeclaration": 3989,
                       "src": "6915:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -6266,7 +6266,7 @@
                         "lValueRequested": false,
                         "memberName": "sub",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3250,
+                        "referencedDeclaration": 3226,
                         "src": "7012:22:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$_t_string_memory_ptr_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -6365,7 +6365,7 @@
                         "lValueRequested": false,
                         "memberName": "sub",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 3223,
+                        "referencedDeclaration": 3199,
                         "src": "7102:16:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
@@ -6513,7 +6513,7 @@
                       "name": "Transfer",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3045,
+                      "referencedDeclaration": 3021,
                       "src": "7138:8:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$_t_uint256_$returns$__$",
@@ -6765,10 +6765,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        4012,
-                        4013
+                        3988,
+                        3989
                       ],
-                      "referencedDeclaration": 4013,
+                      "referencedDeclaration": 3989,
                       "src": "7683:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -6930,10 +6930,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        4012,
-                        4013
+                        3988,
+                        3989
                       ],
-                      "referencedDeclaration": 4013,
+                      "referencedDeclaration": 3989,
                       "src": "7758:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -7122,7 +7122,7 @@
                       "name": "Approval",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3053,
+                      "referencedDeclaration": 3029,
                       "src": "7883:8:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$_t_uint256_$returns$__$",
@@ -7291,7 +7291,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 3368,
+          "SourceUnit": 3344,
           "absolutePath": "@openzeppelin/contracts/math/SafeMath.sol",
           "file": "@openzeppelin/contracts/math/SafeMath.sol",
           "scope": 514,
@@ -7306,7 +7306,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 3181,
+          "SourceUnit": 3157,
           "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
           "file": "@openzeppelin/contracts/access/Ownable.sol",
           "scope": 514,
@@ -7321,7 +7321,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 3078,
+          "SourceUnit": 3054,
           "absolutePath": "@openzeppelin/contracts/GSN/Context.sol",
           "file": "@openzeppelin/contracts/GSN/Context.sol",
           "scope": 514,
@@ -7336,7 +7336,7 @@
       },
       {
         "attributes": {
-          "SourceUnit": 3055,
+          "SourceUnit": 3031,
           "absolutePath": "/C/Users/User/Source/Repos/IBCSmartContracts-1/src/interfaces/IBEP20.sol",
           "file": "../interfaces/IBEP20.sol",
           "scope": 514,
@@ -7353,18 +7353,18 @@
         "attributes": {
           "abstract": false,
           "contractDependencies": [
-            3054,
-            3077,
-            3180
+            3030,
+            3053,
+            3156
           ],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
           "linearizedBaseContracts": [
             513,
-            3180,
-            3054,
-            3077
+            3156,
+            3030,
+            3053
           ],
           "name": "BEP20Token",
           "scope": 514
@@ -7379,7 +7379,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "Context",
-                  "referencedDeclaration": 3077,
+                  "referencedDeclaration": 3053,
                   "type": "contract Context"
                 },
                 "id": 6,
@@ -7400,7 +7400,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "IBEP20",
-                  "referencedDeclaration": 3054,
+                  "referencedDeclaration": 3030,
                   "type": "contract IBEP20"
                 },
                 "id": 8,
@@ -7421,7 +7421,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "Ownable",
-                  "referencedDeclaration": 3180,
+                  "referencedDeclaration": 3156,
                   "type": "contract Ownable"
                 },
                 "id": 10,
@@ -7439,7 +7439,7 @@
                 "attributes": {
                   "contractScope": null,
                   "name": "SafeMath",
-                  "referencedDeclaration": 3367,
+                  "referencedDeclaration": 3343,
                   "type": "library SafeMath"
                 },
                 "id": 12,
@@ -7909,10 +7909,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                4012,
-                                4013
+                                3988,
+                                3989
                               ],
-                              "referencedDeclaration": 4013,
+                              "referencedDeclaration": 3989,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -8308,7 +8308,7 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 4009,
+                                      "referencedDeclaration": 3985,
                                       "type": "msg",
                                       "value": "msg"
                                     },
@@ -8387,7 +8387,7 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 3045,
+                              "referencedDeclaration": 3021,
                               "type": "function (address,address,uint256)",
                               "value": "Transfer"
                             },
@@ -8480,7 +8480,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 4009,
+                                  "referencedDeclaration": 3985,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -8530,7 +8530,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                2992
+                2968
               ],
               "documentation": "@dev Returns the bep token owner.",
               "functionSelector": "893d20e8",
@@ -8637,7 +8637,7 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 3119,
+                              "referencedDeclaration": 3095,
                               "type": "function () view returns (address)",
                               "value": "owner"
                             },
@@ -8668,7 +8668,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                2977
+                2953
               ],
               "documentation": "@dev Returns the token decimals.",
               "functionSelector": "313ce567",
@@ -8779,7 +8779,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                2982
+                2958
               ],
               "documentation": "@dev Returns the token symbol.",
               "functionSelector": "95d89b41",
@@ -8890,7 +8890,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                2987
+                2963
               ],
               "documentation": "@dev Returns the token name.",
               "functionSelector": "06fdde03",
@@ -9001,7 +9001,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                2972
+                2948
               ],
               "documentation": "@dev See {BEP20-totalSupply}.",
               "functionSelector": "18160ddd",
@@ -9211,7 +9211,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                2999
+                2975
               ],
               "documentation": "@dev See {BEP20-balanceOf}.",
               "functionSelector": "70a08231",
@@ -9375,7 +9375,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                3008
+                2984
               ],
               "documentation": "@dev See {BEP20-transfer}.\n\n   * Requirements:\n\n   * - `recipient` cannot be the zero address.\n- the caller must have a balance of at least `amount`.",
               "functionSelector": "a9059cbb",
@@ -9572,7 +9572,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 3065,
+                                  "referencedDeclaration": 3041,
                                   "type": "function () view returns (address payable)",
                                   "value": "_msgSender"
                                 },
@@ -9663,7 +9663,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                3017
+                2993
               ],
               "documentation": "@dev See {BEP20-allowance}.",
               "functionSelector": "dd62ed3e",
@@ -9884,7 +9884,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                3026
+                3002
               ],
               "documentation": "@dev See {BEP20-approve}.\n\n   * Requirements:\n\n   * - `spender` cannot be the zero address.",
               "functionSelector": "095ea7b3",
@@ -10081,7 +10081,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 3065,
+                                  "referencedDeclaration": 3041,
                                   "type": "function () view returns (address payable)",
                                   "value": "_msgSender"
                                 },
@@ -10172,7 +10172,7 @@
           {
             "attributes": {
               "baseFunctions": [
-                3037
+                3013
               ],
               "documentation": "@dev See {BEP20-transferFrom}.\n\n   * Emits an {Approval} event indicating the updated allowance. This is not\nrequired by the EIP. See the note at the beginning of {BEP20};\n\n   * Requirements:\n- `sender` and `recipient` cannot be the zero address.\n- `sender` must have a balance of at least `amount`.\n- the caller must have allowance for `sender`'s tokens of at least\n`amount`.",
               "functionSelector": "23b872dd",
@@ -10508,7 +10508,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 3065,
+                                  "referencedDeclaration": 3041,
                                   "type": "function () view returns (address payable)",
                                   "value": "_msgSender"
                                 },
@@ -10554,7 +10554,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "sub",
-                                  "referencedDeclaration": 3250,
+                                  "referencedDeclaration": 3226,
                                   "type": "function (uint256,uint256,string memory) pure returns (uint256)"
                                 },
                                 "children": [
@@ -10638,7 +10638,7 @@
                                               "overloadedDeclarations": [
                                                 null
                                               ],
-                                              "referencedDeclaration": 3065,
+                                              "referencedDeclaration": 3041,
                                               "type": "function () view returns (address payable)",
                                               "value": "_msgSender"
                                             },
@@ -10932,7 +10932,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 3065,
+                                  "referencedDeclaration": 3041,
                                   "type": "function () view returns (address payable)",
                                   "value": "_msgSender"
                                 },
@@ -10988,7 +10988,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "add",
-                                  "referencedDeclaration": 3207,
+                                  "referencedDeclaration": 3183,
                                   "type": "function (uint256,uint256) pure returns (uint256)"
                                 },
                                 "children": [
@@ -11053,7 +11053,7 @@
                                                   "overloadedDeclarations": [
                                                     null
                                                   ],
-                                                  "referencedDeclaration": 3065,
+                                                  "referencedDeclaration": 3041,
                                                   "type": "function () view returns (address payable)",
                                                   "value": "_msgSender"
                                                 },
@@ -11349,7 +11349,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 3065,
+                                  "referencedDeclaration": 3041,
                                   "type": "function () view returns (address payable)",
                                   "value": "_msgSender"
                                 },
@@ -11409,7 +11409,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "sub",
-                                  "referencedDeclaration": 3250,
+                                  "referencedDeclaration": 3226,
                                   "type": "function (uint256,uint256,string memory) pure returns (uint256)"
                                 },
                                 "children": [
@@ -11474,7 +11474,7 @@
                                                   "overloadedDeclarations": [
                                                     null
                                                   ],
-                                                  "referencedDeclaration": 3065,
+                                                  "referencedDeclaration": 3041,
                                                   "type": "function () view returns (address payable)",
                                                   "value": "_msgSender"
                                                 },
@@ -11750,10 +11750,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                4012,
-                                4013
+                                3988,
+                                3989
                               ],
-                              "referencedDeclaration": 4013,
+                              "referencedDeclaration": 3989,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -11920,10 +11920,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                4012,
-                                4013
+                                3988,
+                                3989
                               ],
-                              "referencedDeclaration": 4013,
+                              "referencedDeclaration": 3989,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -12148,7 +12148,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "sub",
-                                  "referencedDeclaration": 3250,
+                                  "referencedDeclaration": 3226,
                                   "type": "function (uint256,uint256,string memory) pure returns (uint256)"
                                 },
                                 "children": [
@@ -12331,7 +12331,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "add",
-                                  "referencedDeclaration": 3207,
+                                  "referencedDeclaration": 3183,
                                   "type": "function (uint256,uint256) pure returns (uint256)"
                                 },
                                 "children": [
@@ -12449,7 +12449,7 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 3045,
+                              "referencedDeclaration": 3021,
                               "type": "function (address,address,uint256)",
                               "value": "Transfer"
                             },
@@ -12642,10 +12642,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                4012,
-                                4013
+                                3988,
+                                3989
                               ],
-                              "referencedDeclaration": 4013,
+                              "referencedDeclaration": 3989,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -12812,10 +12812,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                4012,
-                                4013
+                                3988,
+                                3989
                               ],
-                              "referencedDeclaration": 4013,
+                              "referencedDeclaration": 3989,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -12867,7 +12867,7 @@
                                       "isPure": false,
                                       "lValueRequested": false,
                                       "member_name": "add",
-                                      "referencedDeclaration": 3207,
+                                      "referencedDeclaration": 3183,
                                       "type": "function (uint256,uint256) pure returns (uint256)"
                                     },
                                     "children": [
@@ -13011,7 +13011,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "add",
-                                  "referencedDeclaration": 3207,
+                                  "referencedDeclaration": 3183,
                                   "type": "function (uint256,uint256) pure returns (uint256)"
                                 },
                                 "children": [
@@ -13148,7 +13148,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "add",
-                                  "referencedDeclaration": 3207,
+                                  "referencedDeclaration": 3183,
                                   "type": "function (uint256,uint256) pure returns (uint256)"
                                 },
                                 "children": [
@@ -13266,7 +13266,7 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 3045,
+                              "referencedDeclaration": 3021,
                               "type": "function (address,address,uint256)",
                               "value": "Transfer"
                             },
@@ -13512,10 +13512,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                4012,
-                                4013
+                                3988,
+                                3989
                               ],
-                              "referencedDeclaration": 4013,
+                              "referencedDeclaration": 3989,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -13740,7 +13740,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "sub",
-                                  "referencedDeclaration": 3250,
+                                  "referencedDeclaration": 3226,
                                   "type": "function (uint256,uint256,string memory) pure returns (uint256)"
                                 },
                                 "children": [
@@ -13894,7 +13894,7 @@
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "member_name": "sub",
-                                  "referencedDeclaration": 3223,
+                                  "referencedDeclaration": 3199,
                                   "type": "function (uint256,uint256) pure returns (uint256)"
                                 },
                                 "children": [
@@ -13983,7 +13983,7 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 3045,
+                              "referencedDeclaration": 3021,
                               "type": "function (address,address,uint256)",
                               "value": "Transfer"
                             },
@@ -14257,10 +14257,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                4012,
-                                4013
+                                3988,
+                                3989
                               ],
-                              "referencedDeclaration": 4013,
+                              "referencedDeclaration": 3989,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -14427,10 +14427,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                4012,
-                                4013
+                                3988,
+                                3989
                               ],
-                              "referencedDeclaration": 4013,
+                              "referencedDeclaration": 3989,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -14712,7 +14712,7 @@
                               "overloadedDeclarations": [
                                 null
                               ],
-                              "referencedDeclaration": 3053,
+                              "referencedDeclaration": 3029,
                               "type": "function (address,address,uint256)",
                               "value": "Approval"
                             },
@@ -14798,7 +14798,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-11-16T11:13:45.573Z",
+  "updatedAt": "2021-11-17T10:59:18.537Z",
   "devdoc": {
     "methods": {
       "allowance(address,address)": {

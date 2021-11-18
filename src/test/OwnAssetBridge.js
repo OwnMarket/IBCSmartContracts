@@ -586,6 +586,88 @@ contract('OwnAssetBridge', accounts => {
         assert(accountHashAfter == "", 'Account hash mismatch')
     })
 
+    it('allow minting token if created through bridging', async() => {
+        // ARRANGE
+        const assetName = "token1"
+        const assetSymbol = "TKN1"
+        const totalSupply = e18(1000000)
+        const newTotalSupply = e18(1500000)
+
+        await assetBridge.bridgeAsset(asset1, account1, assetName, assetSymbol, totalSupply, {from: admin, value: bridgeFee})
+
+        const tokenAddress = await assetBridge.erc20Tokens(asset1)
+        const token1 = new ERC20Token(tokenAddress)
+
+        const totalSupplyBefore = await token1.totalSupply()
+        const bridgeBalanceBefore = await token1.balanceOf(assetBridge.address)
+
+        // ACT
+        await assetBridge.mintErc20Token(tokenAddress, newTotalSupply.sub(totalSupply), {from: admin})
+
+        // ASSERT
+        const totalSupplyAfter = await token1.totalSupply()
+        const bridgeBalanceAfter = await token1.balanceOf(assetBridge.address)
+
+        assert(!totalSupplyAfter.eq(totalSupplyBefore), 'Total supply expected to change')
+        assert(!bridgeBalanceAfter.eq(bridgeBalanceBefore), 'Bridge balance expected to change')
+
+        assert(totalSupplyAfter.eq(newTotalSupply), 'Token total supply mismatch')
+        assert(bridgeBalanceAfter.eq(bridgeBalanceBefore.add(newTotalSupply.sub(totalSupply))), 'Bridge balance mismatch')
+    })
+
+    it('reject minting token if not created through bridging', async() => {
+        // ARRANGE
+        const assetName = "token1"
+        const assetSymbol = "TKN1"
+        const totalSupply = e18(1000000)
+        const newTotalSupply = e18(1500000)
+
+        token1 = await ERC20Token.new(assetName, assetSymbol, totalSupply, {from: admin})
+        await assetBridge.bridgeErc20Token(token1.address, asset1, account1, {from: admin, value: bridgeFee})
+
+        const tokenAddress = await assetBridge.erc20Tokens(asset1)
+
+        const totalSupplyBefore = await token1.totalSupply()
+        const bridgeBalanceBefore = await token1.balanceOf(assetBridge.address)
+
+        // ACT
+        await helpers.shouldFail(assetBridge.mintErc20Token(tokenAddress, newTotalSupply.sub(totalSupply), {from: admin}))
+
+        // ASSERT
+        const totalSupplyAfter = await token1.totalSupply()
+        const bridgeBalanceAfter = await token1.balanceOf(assetBridge.address)
+
+        assert(totalSupplyAfter.eq(totalSupplyBefore), 'Total supply not expected to change')
+        assert(bridgeBalanceAfter.eq(bridgeBalanceBefore), 'Bridge balance not expected to change')
+    })
+
+    it('reject minting token if not called by governor', async() => {
+        // ARRANGE
+        const assetName = "token1"
+        const assetSymbol = "TKN1"
+        const totalSupply = e18(1000000)
+        const newTotalSupply = e18(1500000)
+
+        await assetBridge.bridgeAsset(asset1, account1, assetName, assetSymbol, totalSupply, {from: admin, value: bridgeFee})
+        await assetBridge.setGovernor(ethAddress1, {from: admin})
+
+        const tokenAddress = await assetBridge.erc20Tokens(asset1)
+        const token1 = new ERC20Token(tokenAddress)
+
+        const totalSupplyBefore = await token1.totalSupply()
+        const bridgeBalanceBefore = await token1.balanceOf(assetBridge.address)
+
+        // ACT
+        await helpers.shouldFail(assetBridge.mintErc20Token(tokenAddress, newTotalSupply.sub(totalSupply), {from: admin}))
+
+        // ASSERT
+        const totalSupplyAfter = await token1.totalSupply()
+        const bridgeBalanceAfter = await token1.balanceOf(assetBridge.address)
+
+        assert(totalSupplyAfter.eq(totalSupplyBefore), 'Total supply not expected to change')
+        assert(bridgeBalanceAfter.eq(bridgeBalanceBefore), 'Bridge balance not expected to change')
+    })
+
     it('allow transfer to native chain', async() => {
         // ARRANGE
         const assetName = "token1"
@@ -1562,88 +1644,5 @@ contract('OwnAssetBridge', accounts => {
 
         assert(bridgeFeeBalanceAfter.eq(bridgeFeeBalanceBefore), 'Bridge balance not expected to change')
         assert(!adminFeeBalanceAfter.gt(adminFeeBalanceBefore), 'Admin balance mismatch')
-    })
-
-    it('allow draining non-bridged token', async() => {
-        // ARRANGE
-        const assetName = "token1"
-        const assetSymbol = "TKN1"
-        const totalSupply = e18(1000000)
-        const tokenQty2 = e18(300000)
-
-        token1 = await ERC20Token.new(assetName, assetSymbol, totalSupply, {from: admin})
-        await token1.transfer(ethAddress1, totalSupply, {from: admin})
-        await token1.transfer(assetBridge.address, tokenQty2, {from: ethAddress1})
-
-        const bridgeBalanceBefore = await token1.balanceOf(assetBridge.address)
-        const adminBalanceBefore = await token1.balanceOf(admin)
-
-        // ACT
-        await assetBridge.drainStrayTokens(token1.address, tokenQty2, {from: admin})
-        
-        // ASSERT
-        const bridgeBalanceAfter = await token1.balanceOf(assetBridge.address)
-        const adminBalanceAfter = await token1.balanceOf(admin)
-
-        assert(!bridgeBalanceAfter.eq(bridgeBalanceBefore), 'Bridge balance expected to change')
-        assert(!adminBalanceAfter.eq(adminBalanceBefore), 'Admin balance expected to change')
-
-        assert(bridgeBalanceAfter.eq(e18(0)), 'Bridge balance mismatch')
-        assert(adminBalanceAfter.eq(adminBalanceBefore.add(tokenQty2)), 'Admin balance mismatch')
-    })
-
-    it('reject draining bridged token', async() => {
-        // ARRANGE
-        const assetName = "token1"
-        const assetSymbol = "TKN1"
-        const totalSupply = e18(1000000)
-        const tokenQty2 = e18(300000)
-
-        token1 = await ERC20Token.new(assetName, assetSymbol, totalSupply, {from: admin})
-        await assetBridge.bridgeErc20Token(token1.address, asset1, account3, {from: admin, value: bridgeFee})
-
-        await token1.transfer(ethAddress1, totalSupply, {from: admin})
-        await token1.transfer(assetBridge.address, tokenQty2, {from: ethAddress1})
-
-        const bridgeBalanceBefore = await token1.balanceOf(assetBridge.address)
-        const adminBalanceBefore = await token1.balanceOf(admin)
-
-        // ACT
-        await helpers.shouldFail(assetBridge.drainStrayTokens(token1.address, tokenQty2, {from: admin}))
-        
-        // ASSERT
-        const bridgeBalanceAfter = await token1.balanceOf(assetBridge.address)
-        const adminBalanceAfter = await token1.balanceOf(admin)
-
-        assert(bridgeBalanceAfter.eq(bridgeBalanceBefore), 'Bridge balance not expected to change')
-        assert(adminBalanceAfter.eq(adminBalanceBefore), 'Admin balance not expected to change')
-    })
-
-    it('reject draining non-bridged token if not called by the owner', async() => {
-        // ARRANGE
-        const assetName = "token1"
-        const assetSymbol = "TKN1"
-        const totalSupply = e18(1000000)
-        const tokenQty2 = e18(300000)
-
-        token1 = await ERC20Token.new(assetName, assetSymbol, totalSupply, {from: admin})
-        await token1.transfer(ethAddress1, totalSupply, {from: admin})
-        await token1.transfer(assetBridge.address, tokenQty2, {from: ethAddress1})
-
-        const bridgeBalanceBefore = await token1.balanceOf(assetBridge.address)
-        const adminBalanceBefore = await token1.balanceOf(admin)
-
-        // ACT
-        await assetBridge.drainStrayTokens(token1.address, tokenQty2, {from: admin})
-        
-        // ASSERT
-        const bridgeBalanceAfter = await token1.balanceOf(assetBridge.address)
-        const adminBalanceAfter = await token1.balanceOf(admin)
-
-        assert(!bridgeBalanceAfter.eq(bridgeBalanceBefore), 'Bridge balance expected to change')
-        assert(!adminBalanceAfter.eq(adminBalanceBefore), 'Admin balance expected to change')
-
-        assert(bridgeBalanceAfter.eq(e18(0)), 'Bridge balance mismatch')
-        assert(adminBalanceAfter.eq(adminBalanceBefore.add(tokenQty2)), 'Admin balance mismatch')
     })
 })
