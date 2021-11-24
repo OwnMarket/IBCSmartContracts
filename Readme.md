@@ -15,6 +15,8 @@ This repository contains code for Bridge-related smart contracts:
 
 [bCHXToken Functional Specification](docs/bCHXTokenFunctionalSpecification.md) document contains more details about bCHXToken smart contract on Binance Smart Chain and its functionality.
 
+[Own Asset Bridge Functional Specification](docs/OwnAssetBridgeFunctionalSpecification.md) document contains more details about OwnAssetBridge smart contract and its functionality.
+
 
 ## Setup
 
